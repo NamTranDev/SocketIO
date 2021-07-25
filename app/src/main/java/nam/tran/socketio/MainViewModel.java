@@ -1,5 +1,7 @@
 package nam.tran.socketio;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.v4.util.ArraySet;
 
@@ -14,11 +16,11 @@ public class MainViewModel extends ViewModel {
 
     private CompositeDisposable disposable;
     private RxSocketIo socket;
-    private IViewListener iViewListener;
+    private MutableLiveData<SocketState> _stateStatus = new MutableLiveData<>();
+    public LiveData<SocketState> stateStatus = _stateStatus;
 
-    public void setViewListener(IViewListener iViewListener) {
-        this.iViewListener = iViewListener;
-    }
+    private MutableLiveData<String> _value = new MutableLiveData<>();
+    public LiveData<String> value = _value;
 
     public void onCreate() {
 
@@ -50,9 +52,7 @@ public class MainViewModel extends ViewModel {
     }
 
     private void onState(SocketStateEvent event) {
-        if (iViewListener == null)
-            return;
-        iViewListener.onStateView(event.state());
+        _stateStatus.postValue(event.state());
     }
 
     private void onIncomingMessage(SocketEvent event) {
@@ -61,9 +61,7 @@ public class MainViewModel extends ViewModel {
         switch (eventName) {
             case "stock-stream":
                 Logger.debug(event.data());
-                if (iViewListener == null)
-                    return;
-                iViewListener.onValue(event.data().toString());
+                _value.postValue(event.data().toString());
                 break;
         }
     }
