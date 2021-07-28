@@ -36,6 +36,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+    implementation "android.arch.lifecycle:reactivestreams:1.1.1"
+
     implementation "io.reactivex.rxjava3:rxjava:3.0.13"
 
     implementation('io.socket:socket.io-client:2.0.1') {

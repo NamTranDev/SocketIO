@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
         ViewModelProvider.Factory factory = new ViewModelProvider.NewInstanceFactory();
         model = new ViewModelProvider(this,factory).get(MainViewModel.class);
+        model.onCreate();
         model.stateStatus.observe(this, state -> {
             if (state == null)
                 return;
@@ -50,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
                 return;
             text.setText(value);
         });
-        model.onCreate();
+
+        model.emit.observe(this, Logger::debug);
 
         findViewById(R.id.emit).setOnClickListener(v -> model.emit());
     }
